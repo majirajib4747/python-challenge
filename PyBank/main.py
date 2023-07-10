@@ -63,7 +63,7 @@ analysisoutputfile.write("    Total Months: " + str(total_nos_of_months) + "\n")
 analysisoutputfile.write("    Total Profits: " + "$" + str(Total_Profit_Loss) +"\n")
 analysisoutputfile.write("    Average Change: " + '$' + "{:.2f}".format(change_profit/count) + "\n")
 analysisoutputfile.write("    Greatest Increase in Profits: " + max_profit_info + "\n")
-analysisoutputfile.write("    Greatest Decrease in Profits: " + max_profit_info + "\n")
+analysisoutputfile.write("    Greatest Decrease in Profits: " + min_profit_info + "\n")
 
 # Close the Files
 
