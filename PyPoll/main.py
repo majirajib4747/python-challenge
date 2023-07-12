@@ -1,9 +1,23 @@
 import csv
+import os
 
 # Open Files
-pypollfile = open ("C:\\Users\\RMaji\\Desktop\\Personal Info\\Penn State Data Science\\Module-3\\Challenges\\PyPoll\\Resources\\election_data.csv" ,"r")
 
-analysisoutputfile = open ("C:\\Users\\RMaji\\Desktop\\Personal Info\\Penn State Data Science\\Module-3\\Challenges\\PyPoll\\analysis\\pollanalysisoutput.csv" ,"w")
+#input file path
+script_dir = os.path.dirname(__file__)
+input_rel_path = "Resources/election_data.csv"
+abs_file_path_input = os.path.join(script_dir, input_rel_path)
+
+#output file path
+
+script_dir = os.path.dirname(__file__)
+output_rel_path = "analysis/pollanalysisoutput.txt"
+abs_file_path_output = os.path.join(script_dir, output_rel_path)
+
+
+pypollfile = open (abs_file_path_input ,"r")
+analysisoutputfile = open (abs_file_path_output ,"w")
+
 
 reader = csv.reader(pypollfile)
 
