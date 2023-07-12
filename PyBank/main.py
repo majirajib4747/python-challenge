@@ -1,8 +1,22 @@
 import csv
+import os
 
 # Open Files
-pybankfile = open ("C:\\Users\\RMaji\\Desktop\\Personal Info\\Penn State Data Science\\Module-3\\Challenges\\PyBank\\Resources\\budget_data.csv" ,"r")
-analysisoutputfile = open ("C:\\Users\\RMaji\\Desktop\\Personal Info\\Penn State Data Science\\Module-3\\Challenges\\PyBank\\analysis\\analysisoutput.csv" ,"w")
+
+#input file path
+script_dir = os.path.dirname(__file__)
+input_rel_path = "Resources/budget_data.csv"
+abs_file_path_input = os.path.join(script_dir, input_rel_path)
+
+#output file path
+
+script_dir = os.path.dirname(__file__)
+output_rel_path = "analysis/analysisoutput.txt"
+abs_file_path_output = os.path.join(script_dir, output_rel_path)
+
+
+pybankfile = open (abs_file_path_input ,"r")
+analysisoutputfile = open (abs_file_path_output ,"w")
 
 reader = csv.reader(pybankfile)
 monthname_collection = []
