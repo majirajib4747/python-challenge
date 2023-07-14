@@ -29,12 +29,26 @@ Initial_Profit = 0
 count = 0
 max_profit = 0
 min_profit = 0
+change_profit = 0
+max_profit_info = 0
+min_profit_info = 0
 
-headers = next(reader, None)
+# Function for calculating Totals and Summary
 
-# Read the CSV and find the output results
+def pybank_calculation(x) :
 
-for x in reader:
+    # Set all the variables as global variable
+
+    global Total_Profit_Loss
+    global Initial_Profit
+    global count
+    global max_profit
+    global min_profit
+    global change_profit
+    global max_profit_info
+    global min_profit_info
+
+
     monthname = x[0].split("-")[0]
     # needed for finding out unique month
     monthname_collection.append(monthname)
@@ -44,14 +58,24 @@ for x in reader:
     Initial_Profit = int(x[1])
     count = count + 1
     # Find the Maximum Profit
-    if int(x[1]) > max_profit :
-       max_profit_info = x[0] + " " + "(" +  "$" + x[1] + ")"
-       max_profit = int(x[1])
+    if int(x[1]) > max_profit:
+        max_profit_info = x[0] + " " + "(" + "$" + x[1] + ")"
+        max_profit = int(x[1])
     # Find the minimum Profit
     if int(x[1]) < min_profit:
-        min_profit_info = x[0] + " " + "(" +  "$" + x[1] + ")"
+        min_profit_info = x[0] + " " + "(" + "$" + x[1] + ")"
         min_profit = int(x[1])
 
+
+# Read the Header
+
+headers = next(reader, None)
+
+# Read the CSV and find the output results
+
+for x in reader:
+    #calling pybank calculation function for each row
+    pybank_calculation(x)
 
 # Find the Unique Months
 uniqueMonths = set(monthname_collection)
