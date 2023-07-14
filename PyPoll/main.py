@@ -1,6 +1,89 @@
 import csv
 import os
 
+
+
+# Initialize the Variables
+count = 0
+candidate = []
+temp_candidate = ""
+candidate_count = 0
+individual_candidate_count = 0
+temp_percentage = 0
+winner = ""
+pypoll_dict = {'name':[], 'percentage':[] , 'individual_count':[]}
+name_list = []
+percentage_list = []
+individual_count_list = []
+
+# Define Pypoll function for all calculation
+def pypoll_calculation(candidate_list) :
+
+    global count
+    global candidate
+    global temp_candidate
+    global candidate_count
+    global individual_candidate_count
+    global temp_percentage
+    global winner
+    global pypoll_dict
+    global name_list
+    global percentage_list
+    global individual_count_list
+
+    for candidateitem in sorted(candidate_list):
+
+        if candidate_count > 0:
+            # When Candidate Name change calculate Total Votes and Percentage
+
+            if (candidateitem != temp_candidate):
+                percentage = (individual_candidate_count * 100) / len(candidate)
+
+                name_list = temp_candidate
+                percentage_list = str('{0:.2f}'.format(percentage)) + "%"
+                individual_count_list = "(" + str(individual_candidate_count) + ")"
+
+                pypoll_dict["name"].append(name_list)
+                pypoll_dict["percentage"].append(percentage_list)
+                pypoll_dict["individual_count"].append(individual_count_list)
+
+                individual_candidate_count = 1
+
+                if percentage > temp_percentage:
+                    winner = temp_candidate
+                    temp_percentage = percentage
+                else:
+                    temp_percentage = percentage
+
+                temp_candidate = candidateitem
+            else:
+                individual_candidate_count = individual_candidate_count + 1
+                temp_candidate = candidateitem
+
+        else:
+            individual_candidate_count = individual_candidate_count + 1
+            temp_candidate = candidateitem
+
+        candidate_count = candidate_count + 1
+
+    # For Last record
+    percentage = (individual_candidate_count * 100) / len(candidate)
+
+    if percentage > temp_percentage:
+        winner = temp_candidate
+        temp_percentage = percentage
+    else:
+        temp_percentage = percentage
+
+    name_list = temp_candidate
+    percentage_list = str('{0:.2f}'.format(percentage)) + "%"
+    individual_count_list = "(" + str(individual_candidate_count) + ")"
+
+    pypoll_dict["name"].append(name_list)
+    pypoll_dict["percentage"].append(percentage_list)
+    pypoll_dict["individual_count"].append(individual_count_list)
+
+
 # Open Files
 
 #input file path
@@ -21,15 +104,6 @@ analysisoutputfile = open (abs_file_path_output ,"w")
 
 reader = csv.reader(pypollfile)
 
-# Initialize the Variables
-count = 0
-candidate = []
-temp_candidate = ""
-candidate_count = 0
-individual_candidate_count = 0
-temp_percentage = 0
-winner = ""
-
 # Omit the Header
 headers = next(reader, None)
 
@@ -40,10 +114,18 @@ for x in reader:
     count = count + 1
     candidate.append(x[2])
 
+pypoll_calculation(candidate)
+
+
+
+
+# Print summary in Console and write into output file
+
 print("Election Result")
 print("------------------------------------")
 print ("Total Votes: " + str(len(candidate)))
 print("------------------------------------")
+
 
 analysisoutputfile.write("Election Result\n\n")
 analysisoutputfile.write("------------------------------------\n")
@@ -51,59 +133,21 @@ analysisoutputfile.write ("Total Votes: " + str(len(candidate))+ "\n")
 analysisoutputfile.write("------------------------------------\n")
 
 
-for candidateitem in sorted(candidate):
-    #print(candidateitem)
-
-    if  candidate_count > 0 :
-            # When Candidate Name change calculate Total Votes and Percentage
-            if (candidateitem != temp_candidate) :
-                percentage = (individual_candidate_count * 100) / len(candidate)
-                print ( temp_candidate + ":    " + str('{0:.2f}'.format(percentage)) + "%" + "   " + "(" + str(individual_candidate_count)  + ")" )
-                analysisoutputfile.write(temp_candidate + ":    " + str('{0:.2f}'.format(percentage)) + "%" + "   " + "(" + str(
-                    individual_candidate_count) + ")" + "\n")
-                individual_candidate_count = 1
-
-                if percentage > temp_percentage :
-                    winner = temp_candidate
-                    temp_percentage = percentage
-                else :
-                    temp_percentage = percentage
-
-                temp_candidate = candidateitem
-            else :
-                    individual_candidate_count = individual_candidate_count + 1
-                    temp_candidate = candidateitem
-
-    else :
-                individual_candidate_count = individual_candidate_count + 1
-                temp_candidate = candidateitem
+total_nos_of_candidate = len(pypoll_dict['name'])
 
 
-    candidate_count = candidate_count + 1
+for i in range(total_nos_of_candidate) :
+    print(f"{pypoll_dict['name'][i]} :  {pypoll_dict['percentage'][i]}  {pypoll_dict['individual_count'][i]}" )
+    analysisoutputfile.write(f"{pypoll_dict['name'][i]} :  {pypoll_dict['percentage'][i]}  {pypoll_dict['individual_count'][i]}\n\n")
 
-# For Last record
-percentage = (individual_candidate_count * 100) / len(candidate)
-
-if percentage > temp_percentage:
-    winner = temp_candidate
-    temp_percentage = percentage
-else:
-    temp_percentage = percentage
-
-print ( temp_candidate + ":    " + str('{0:.2f}'.format(percentage)) + "%" + "   " + "(" + str(individual_candidate_count)  + ")" + "\n")
 
 print("------------------------------------")
 
-print ("Winner: " + winner + "\n")
-print("------------------------------------")
+print("Winner is  : " + winner)
 
+analysisoutputfile.write("------------------------------------\n")
 
-analysisoutputfile.write ( temp_candidate + ":    " + str('{0:.2f}'.format(percentage)) + "%" + "   " + "(" + str(individual_candidate_count)  + ")" + "\n")
-
-analysisoutputfile.write("------------------------------------\n\n")
-
-analysisoutputfile.write ("Winner: " + winner + "\n\n")
-analysisoutputfile.write("------------------------------------")
+analysisoutputfile.write("Winner is  : " + winner)
 
 # Close the Files
 
